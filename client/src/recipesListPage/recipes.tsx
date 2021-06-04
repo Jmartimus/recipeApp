@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './recipes.scss';
 import { Link } from 'react-router-dom';
-import { incRecipe } from '../incRecipes.interface';
+import { incRecipe } from '../interfaces/incRecipes.interface';
 import { useSetRecoilState } from 'recoil';
 import { chosenRec } from '../recoil/atoms';
 
@@ -21,7 +21,7 @@ function Recipes() {
   if (!recipeList) {
     getRecipes();
   }
-
+console.log(recipeList ? recipeList[0].images.full: '')
   return (
     <div>
       {/* <img alt="Stuff" src={recipeList ? recipeList[0].images.full : ''}></img> */}
