@@ -1,0 +1,1 @@
+//install recoil and create an atom that carries the recipe from recipes to recipePage in incRecipe format
