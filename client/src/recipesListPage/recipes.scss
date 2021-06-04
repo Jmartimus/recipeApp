@@ -1,9 +1,5 @@
 @import "../variables.scss";
 
-html, body {
-  margin: 0;
-  padding: 0;
-}
 #recipesLargeContainer {
   display: flex;
   align-items: center;
@@ -36,7 +32,3 @@ font-size: 30px;
   font-family: $roboto;
 font-size: 16px;
 }
-// #link {
-//   height: 250px;
-//   width: 350px;
-// }

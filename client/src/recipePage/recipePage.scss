@@ -1,4 +1,60 @@
-#nothingness {
-  background-color: white;
-  z-index: 99;
+@import "../variables.scss";
+
+#recPageBack {
+  background-image:
+    url('https://images.unsplash.com/photo-1556911220-bff31c812dba?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=835&q=80');
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size:cover;
+  height: auto;
+  min-width: 100%;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+//figure out how to make background stay still and recipe scroll
+#recContainer {
+height: auto;
+width: 800px;
+background-color: white;
+border-radius: 5px;
+box-shadow: 0px 0px 20px #919191;
+}
+#recipeTitle {
+font-family: $roboto;
+text-align: center;
+font-size: 60px;
+}
+#recipeDesc {
+  font-family: $roboto;
+  text-align: center;
+  font-size: 16px;
+}
+#servingsTitle {
+  font-family: $roboto;
+  font-size: 30px;
+  margin-left: 20px;
+}
+#ingredientsTitle {
+  font-family: $roboto;
+  font-size: 30px;
+  margin-left: 20px;
+}
+#ingredientsList {
+  list-style-type: none;
+  #ingredient {
+text-align: left;
+font-family: $roboto;
+margin: 20px;
+font-size: 20px;
+  }
+
+}
+
+#directionsList {
+  #direction {
+    text-align: left;
+    font-family: $roboto;
+  }
 }
