@@ -14,9 +14,7 @@ export const chosenRec = atom<IncRecipe>({
     cookTime: 0,
     postDate: '',
     editDate: '',
-    ingredients: [
-      { uuid: '', amount: 0, measurement: '', name: '' }
-    ],
+    ingredients: [{ uuid: '', amount: 0, measurement: '', name: '' }],
     directions: [{ instructions: '', optional: false }],
   },
 });

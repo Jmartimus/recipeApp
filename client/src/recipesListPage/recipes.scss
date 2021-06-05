@@ -1,4 +1,4 @@
-@import "../variables.scss";
+@import '../variables.scss';
 
 #recipesLargeContainer {
   display: flex;
@@ -6,7 +6,7 @@
   justify-content: center;
   flex-wrap: wrap;
   background-color: $gray;
-  height:100%;
+  height: 100%;
   width: 100%;
 }
 #recipeContainer {
@@ -23,21 +23,20 @@
   text-decoration: none;
   color: black;
   margin: 30px;
-  
 }
-#firstPagePic{
-border-radius: 5px 5px 0px 0px;
-width: 100%;
-height:100%;
+#firstPagePic {
+  border-radius: 5px 5px 0px 0px;
+  width: 100%;
+  height: 100%;
 }
-#firstPageTitle{
-font-family: $roboto;
-font-size: 30px;
-height: 40px;
-margin:30px;
-}
-#firstPageDesc{
+#firstPageTitle {
   font-family: $roboto;
-font-size: 16px;
-margin-bottom: 50px;
+  font-size: 30px;
+  height: 40px;
+  margin: 30px;
+}
+#firstPageDesc {
+  font-family: $roboto;
+  font-size: 16px;
+  margin-bottom: 50px;
 }

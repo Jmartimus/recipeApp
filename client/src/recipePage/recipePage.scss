@@ -1,11 +1,10 @@
-@import "../variables.scss";
+@import '../variables.scss';
 
 #recPageBack {
-  background-image:
-    url('https://images.unsplash.com/photo-1556911220-bff31c812dba?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=835&q=80');
+  background-image: url('https://images.unsplash.com/photo-1556911220-bff31c812dba?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=835&q=80');
   background-position: top;
   background-repeat: no-repeat;
-  background-size:cover;
+  background-size: cover;
   height: auto;
   min-width: 100%;
   background-attachment: fixed;
@@ -13,21 +12,30 @@
   justify-content: center;
   align-items: center;
 }
-//figure out how to make background stay still and recipe scroll
 #recContainer {
   margin-top: 30px;
   margin-bottom: 30px;
-height: auto;
-width: 800px;
-background-color: white;
-border-radius: 5px;
-box-shadow: 0px 0px 20px #919191;
+  height: auto;
+  width: 800px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 20px #919191;
+}
+#recipeImageContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+#recipeImage {
+  width: auto;
+  margin: 20px;
+  border-radius: 5px;
 }
 #recipeTitle {
-font-family: $roboto;
-text-align: center;
-font-size: 60px;
-height: 40px;
+  font-family: $roboto;
+  text-align: center;
+  font-size: 60px;
+  height: 40px;
 }
 #recipeDesc {
   font-family: $roboto;
@@ -54,19 +62,42 @@ height: 40px;
 #ingredientsList {
   list-style-type: none;
   #ingredient {
-text-align: left;
-font-family: $roboto;
-margin: 20px;
-font-size: 20px;
+    text-align: left;
+    font-family: $roboto;
+    margin: 20px;
+    font-size: 20px;
   }
-
 }
+#specialBtn {
+  color: red;
+  font-size: 10px;
+  margin-top: 10px;
+  margin-left: 30px;
+  border: 1px solid black;
+}
+// #specialContainer {
+//   display: flex;
+//   justify-content: left;
+//   margin-left: 40px;
+// #special {
+// font-size: 20px;
+// margin-bottom: -15px;
+// margin-top: 3px;
+// color: red;
+// #specialTitle {
+//   font-size: 10px;
+// }
+// #specialText {
+//   font-size: 10px;
+// }
+// }
+// }
 
 #directionsTitle {
   font-family: $roboto;
   font-size: 30px;
   margin-left: 20px;
-  margin-top: 60px;
+  margin-top: 40px;
 }
 
 #directionsList {
@@ -77,8 +108,23 @@ font-size: 20px;
   #direction {
     font-family: $roboto;
     text-align: left;
-font-family: $roboto;
-margin: 20px;
-font-size: 20px;
+    font-family: $roboto;
+    margin: 20px;
+    font-size: 20px;
   }
+}
+#buttonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+#backButton {
+  color: black;
+  text-align: center;
+  border: 3px solid black;
+}
+#backLink {
+  text-decoration: none;
+  color: black;
 }

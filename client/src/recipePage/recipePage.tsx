@@ -6,10 +6,20 @@ import axios from 'axios';
 import './recipePage.scss';
 import { Specials } from '../interfaces/specials.interface';
 import { Ingredient } from '../interfaces/incRecipes.interface';
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  DialogTitle,
+  List,
+  ListItem,
+} from '@material-ui/core';
 
-function SentRecPage() {
+function RecipePage() {
   const sentRec = useRecoilValue(chosenRec);
   const [specials, setSpecials] = useState<Specials[]>();
+  const [open, setOpen] = useState(false);
+  const [checked, setChecked] = useState(true);
   useEffect(() => {
     const getSpecials = async () => {
       const response = await axios.get('http://localhost:3001/specials');
@@ -17,20 +27,11 @@ function SentRecPage() {
     };
     getSpecials();
   }, []);
-  
-  const findSpecial = (specials: Specials[]) => {
-    specials.map((special) => {
-      const specialMatch = sentRec.ingredients.find(
-        (ingredient) => ingredient.uuid === special.ingredientId
-      );
-      console.log(specialMatch);
-    });
-  };
   const findSpecials = (ingredient: Ingredient) => {
     if (!specials) {
       return [];
     }
-    const matches = []
+    const matches = [];
     for (const special of specials) {
       if (special.ingredientId === ingredient.uuid) {
         matches.push(special);
@@ -38,46 +39,86 @@ function SentRecPage() {
     }
     return matches;
   };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-
-  if (specials) {
-    findSpecial(specials);
-  }
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+  //1. fix modal to display just 1 special item info
+  //2. fix checkbox to work for each ingredient and change css of checkbox
+  //3. create input page ("+" button with material Icon on the bottom recipe page that opens a modal with a form to input a new recipe or special)
+  //4. edit recipes and specials page ("edit document" button with material Icon on other side of recipe page that opens a modal with the option to edit specials or recipes.)
 
   return (
     <div id="recPageBack">
       {sentRec ? (
         <div id="recContainer">
-          <img alt={sentRec.description} src={sentRec.images.medium}></img>
-          <h1 id="sentRecTitle">{sentRec.title}</h1>
-          <p id="sentRecDesc">{sentRec.description}</p>
-
+          <h1 id="recipeTitle">{sentRec.title}</h1>
+          <p id="recipeDesc">{sentRec.description}</p>
+          <div id="recipeImageContainer">
+            <img
+              alt={sentRec.description}
+              src={sentRec.images.medium}
+              id="recipeImage"
+            ></img>
+          </div>
           <div id="miniContainer">
             <h2 id="ingredientsTitle">Ingredients </h2>
             <h2 id="servingsTitle">
-              
               Original recipe yields {sentRec.servings} servings
             </h2>
           </div>
           <ul id="ingredientsList">
             {sentRec.ingredients.map((ingredient) => (
-              <li id="ingredient">
+              <li key={ingredient.uuid} id="ingredient">
                 {' '}
-                <input type="checkbox" />
-                {ingredient.amount} {ingredient.measurement}{' '}
-                {ingredient.name}<div>{findSpecials(ingredient).map(special => <div>{special.title}</div>)}</div>
+                <Checkbox checked={checked} onChange={handleChange}></Checkbox>
+                {ingredient.amount} {ingredient.measurement} {ingredient.name}
+                <div>
+                  {findSpecials(ingredient).map((special) => (
+                    <div id="specialBtnContainer">
+                      <Button id="specialBtn" onClick={handleClickOpen}>
+                        Click for specials on this item!
+                      </Button>
+                      <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        id="specialContainer"
+                      >
+                        <DialogTitle>Special!</DialogTitle>
+                        <List key={special.uuid} id="special">
+                          <ListItem id="specialTitle">
+                            What: {special.title}
+                          </ListItem>
+                          <ListItem id="specialText">
+                            Where: {special.text}
+                          </ListItem>
+                        </List>
+                      </Dialog>
+                    </div>
+                  ))}
+                </div>
               </li>
             ))}
           </ul>
           <h2 id="directionsTitle">Directions </h2>
           <ol id="directionsList">
-            {sentRec.directions.map((directions) => (
-              <li id="direction">{directions.instructions}</li>
+            {sentRec.directions.map((direction, index) => (
+              <li key={index} id="direction">
+                {direction.instructions}
+              </li>
             ))}
           </ol>
-          <Link to="/">
-            <button>Back to sentRecs</button>
-          </Link>
+          <div id="buttonContainer">
+            <Link id="backLink" to="/">
+              <Button id="backButton">Back to recipes</Button>
+            </Link>
+          </div>
         </div>
       ) : (
         ''
@@ -86,4 +127,4 @@ function SentRecPage() {
   );
 }
 
-export default SentRecPage;
+export default RecipePage;
