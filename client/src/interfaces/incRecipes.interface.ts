@@ -5,7 +5,12 @@ export interface Ingredient {
   name: string;
 }
 
-export interface IncRecipe {
+export interface Direction {
+  instructions: string;
+  optional: Boolean
+}
+
+export interface Recipe {
   uuid: string;
   title: string;
   description: string;
@@ -16,5 +21,5 @@ export interface IncRecipe {
   postDate: string;
   editDate: string;
   ingredients: Ingredient[];
-  directions: { instructions: string; optional: Boolean }[];
+  directions: Direction[];
 }

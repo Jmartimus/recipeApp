@@ -1,13 +1,15 @@
 @import '../variables.scss';
 
+#background {
+  background-color: $gray;
+  height: 100%;
+  width: 100%;
+}
 #recipesLargeContainer {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  background-color: $gray;
-  height: 100%;
-  width: 100%;
 }
 #recipeContainer {
   width: 350px;
@@ -27,7 +29,7 @@
 #firstPagePic {
   border-radius: 5px 5px 0px 0px;
   width: 100%;
-  height: 100%;
+  height: 200px;
 }
 #firstPageTitle {
   font-family: $roboto;
@@ -40,3 +42,15 @@
   font-size: 16px;
   margin-bottom: 50px;
 }
+#buttonBar {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  
+
+}
+#btnContainer {
+  margin-right: 30px;
+  margin-bottom: 10px;
+}
+

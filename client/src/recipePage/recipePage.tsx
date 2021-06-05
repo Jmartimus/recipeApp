@@ -5,7 +5,7 @@ import { chosenRec } from '../recoil/atoms';
 import axios from 'axios';
 import './recipePage.scss';
 import { Specials } from '../interfaces/specials.interface';
-import { Ingredient } from '../interfaces/incRecipes.interface';
+import { Ingredient, Direction } from '../interfaces/incRecipes.interface';
 import {
   Button,
   Checkbox,
@@ -18,7 +18,8 @@ import {
 function RecipePage() {
   const sentRec = useRecoilValue(chosenRec);
   const [specials, setSpecials] = useState<Specials[]>();
-  const [open, setOpen] = useState(false);
+  const [currentSpecial, setCurrentSpecial] = useState<Specials>();
+  const [currentIngredient, setCurrentIngredient] = useState<Ingredient>();
   const [checked, setChecked] = useState(true);
   useEffect(() => {
     const getSpecials = async () => {
@@ -39,20 +40,13 @@ function RecipePage() {
     }
     return matches;
   };
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
-  //1. fix modal to display just 1 special item info
-  //2. fix checkbox to work for each ingredient and change css of checkbox
-  //3. create input page ("+" button with material Icon on the bottom recipe page that opens a modal with a form to input a new recipe or special)
-  //4. edit recipes and specials page ("edit document" button with material Icon on other side of recipe page that opens a modal with the option to edit specials or recipes.)
+  //1. fix checkbox to work for each ingredient and change css of checkbox
+  //2. create input page ("+" button with material Icon on the bottom recipe page that opens a modal with a form to input a new recipe or special)
+  //3. edit recipes and specials page ("edit document" button with material Icon on other side of recipe page that opens a modal with the option to edit specials or recipes.)
+  //4. background moves when modal opens 
 
   return (
     <div id="recPageBack">
@@ -74,42 +68,49 @@ function RecipePage() {
             </h2>
           </div>
           <ul id="ingredientsList">
-            {sentRec.ingredients.map((ingredient) => (
+            {sentRec.ingredients.map((ingredient: Ingredient) => (
               <li key={ingredient.uuid} id="ingredient">
                 {' '}
-                <Checkbox checked={checked} onChange={handleChange}></Checkbox>
+                <Checkbox checked={checked} onClick={() => setCurrentIngredient(ingredient)} onChange={handleChange}></Checkbox>
                 {ingredient.amount} {ingredient.measurement} {ingredient.name}
                 <div>
                   {findSpecials(ingredient).map((special) => (
                     <div id="specialBtnContainer">
-                      <Button id="specialBtn" onClick={handleClickOpen}>
+                      <Button
+                        id="specialBtn"
+                        onClick={() => setCurrentSpecial(special)}
+                      >
                         Click for specials on this item!
                       </Button>
-                      <Dialog
-                        open={open}
-                        onClose={handleClose}
-                        id="specialContainer"
-                      >
-                        <DialogTitle>Special!</DialogTitle>
-                        <List key={special.uuid} id="special">
-                          <ListItem id="specialTitle">
-                            What: {special.title}
-                          </ListItem>
-                          <ListItem id="specialText">
-                            Where: {special.text}
-                          </ListItem>
-                        </List>
-                      </Dialog>
                     </div>
                   ))}
                 </div>
               </li>
             ))}
           </ul>
+          {currentSpecial ? (
+            <Dialog
+              open={Boolean(currentSpecial)}
+              onClick={() => setCurrentSpecial(undefined)}
+              id="specialContainer"
+            >
+              <DialogTitle>Special!</DialogTitle>
+              <List key={currentSpecial.uuid} id="special">
+                <ListItem id="specialTitle">
+                  What: {currentSpecial.title}
+                </ListItem>
+                <ListItem id="specialText">
+                  Where: {currentSpecial.text}
+                </ListItem>
+              </List>
+            </Dialog>
+          ) : (
+            ''
+          )}
           <h2 id="directionsTitle">Directions </h2>
           <ol id="directionsList">
-            {sentRec.directions.map((direction, index) => (
-              <li key={index} id="direction">
+            {sentRec.directions.map((direction: Direction, i: number) => (
+              <li key={i} id="direction">
                 {direction.instructions}
               </li>
             ))}
