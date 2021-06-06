@@ -111,7 +111,7 @@ function RecipePage() {
           <ol id="directionsList">
             {sentRec.directions.map((direction: Direction, i: number) => (
               <li key={i} id="direction">
-                {direction.instructions}
+                {direction.instruction}
               </li>
             ))}
           </ol>

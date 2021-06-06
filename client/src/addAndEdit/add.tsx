@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import {
   Button,
+  Dialog,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   TextField,
 } from '@material-ui/core';
-import { Recipe } from '../interfaces/incRecipes.interface';
+import { Direction, Ingredient, Recipe } from '../interfaces/incRecipes.interface';
 import './add.scss';
 import { timeStamper } from '../timestamp';
+import { AddCircle } from '@material-ui/icons';
 
-// example of date format for postDate. "postDate": "01/20/2018 05:15:03 PM"  Create an exportable function that timestamps.
 //add a button to the ingredient function and edit fields and such.
 
 export const AddRecipe = () => {
@@ -22,9 +23,9 @@ export const AddRecipe = () => {
     title: '',
     description: '',
     images: { full: '', medium: '', small: '' },
-    servings: NaN,
-    prepTime: NaN,
-    cookTime: NaN,
+    servings: 0,
+    prepTime: 0,
+    cookTime: 0,
     postDate: '',
     editDate: '',
     ingredients: [
@@ -37,13 +38,24 @@ export const AddRecipe = () => {
     ],
     directions: [
       {
-        instructions: '',
+        instruction: '',
         optional: false,
       },
     ],
   });
   const [choice, setChoice] = useState<string>('');
-  const [newIngredient, setNewIngredient] = useState<Boolean>(false);
+  const [settingNewIngredient, setSettingNewIngredient] = useState<boolean>(false);
+  const [newIngredient, setNewIngredient] = useState<Ingredient>({
+    uuid: '',
+    amount: NaN,
+    measurement: '',
+    name: '',
+  });
+  const [settingNewDirection, setSettingNewDirection] = useState<boolean>(false);
+  const [newDirection, setNewDirection] = useState<Direction>({
+    instruction: '',
+   optional: false,
+  });
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setChoice(event.target.value as string);
@@ -61,44 +73,86 @@ export const AddRecipe = () => {
   };
 
   const createIngredient = () => {
+    const finishIngredient = () => {
+      setSettingNewIngredient(false);
+      setNewRecipe({...newRecipe, ingredients:[...newRecipe.ingredients, newIngredient]})
+    }
     return (
-      <FormControl>
-        <TextField
-          value={newRecipe.title}
-          placeholder="title of your recipe..."
+      <Dialog open={settingNewIngredient}
+      onClose={() => setSettingNewIngredient(false)}
+      className="specialContainer">
+      <FormControl className="ingDirFormContainer">
+          <TextField
+            variant="outlined"
+          className="ingDirInputFields"
+          value={newIngredient.name}
+          placeholder="name of ingredient"
           type="text"
           onChange={(e) =>
-            setNewRecipe({ ...newRecipe, title: e.target.value })
+            setNewIngredient({ ...newIngredient, name: e.target.value })
           }
         ></TextField>
-        <TextField
-          value={newRecipe.description}
-          placeholder="type a recipe description..."
+          <TextField
+            variant="outlined"
+            className="ingDirInputFields"
+          value={newIngredient.measurement}
+          placeholder="What measurement?"
           type="text"
           onChange={(e) =>
-            setNewRecipe({ ...newRecipe, description: e.target.value })
+            setNewIngredient({ ...newIngredient, measurement: e.target.value })
           }
         ></TextField>
-        <TextField
-          value={newRecipe.servings}
-          placeholder="How many servings?"
+          <TextField
+            variant="outlined"
+            className="ingDirInputFields"
+          value={newIngredient.amount}
+          placeholder="How many?"
           type="number"
           onChange={(e) =>
-            setNewRecipe({ ...newRecipe, servings: parseInt(e.target.value) })
+            setNewIngredient({ ...newIngredient, amount: parseInt(e.target.value) })
           }
         ></TextField>
-        <TextField
-          value={newRecipe.prepTime}
-          placeholder="How many minutes of preperation time?"
-          type="number"
-          onChange={(e) =>
-            setNewRecipe({ ...newRecipe, prepTime: parseInt(e.target.value) })
-          }
-        ></TextField>
-        <Button id="submitIngredient">Submit Ingredient</Button>
-      </FormControl>
+        <Button onClick={finishIngredient} id="submitIngredient">Submit Ingredient</Button>
+      </FormControl></Dialog>
     );
   };
+  const createDirection = () => {
+    const finishDirection = () => {
+      setSettingNewDirection(false);
+      setNewRecipe({...newRecipe, directions:[...newRecipe.directions, newDirection]})
+    }
+    return (
+      <Dialog open={settingNewDirection}
+      onClose={() => setSettingNewDirection(false)}
+      className="specialContainer">
+      <FormControl>
+        <TextField
+          value={newDirection.instruction}
+          placeholder="Write one instructional step"
+          type="text"
+          onChange={(e) =>
+            setNewDirection({ ...newDirection, instruction: e.target.value })
+          }
+          ></TextField>
+          <InputLabel id="firstQuestion">
+            What do you want to add?
+          </InputLabel>
+          <Select
+              labelId=""
+              variant="outlined"
+            id="dropdown"
+            value={newDirection.optional}
+            onChange={(e) =>
+              setNewDirection({ ...newDirection, optional: Boolean(e.target.value) })
+            }
+          >
+            <MenuItem value='false'>False</MenuItem>
+            <MenuItem value='true'>True</MenuItem>
+          </Select>
+        <Button onClick={finishDirection} id="submitDirection">Submit Direction</Button>
+      </FormControl></Dialog>
+    );
+  }; 
 
   // const addSpecialIngredient = async () => {
   //   const response = await axios.post(
@@ -136,7 +190,7 @@ export const AddRecipe = () => {
       )}
       {choice === 'recipes' ? (
         <FormControl id='recipeInputContainer'>
-          <h1>Recipe Card<hr></hr></h1><div id="inputContainer">
+          <h1 id="recipeCardTitle">Recipe Card<hr></hr></h1><div id="inputContainer">
           <div className="inputRow"><p className="recipeInputTitles">Title </p><TextField
             variant="outlined"
             className="recipeInputs"
@@ -198,8 +252,12 @@ export const AddRecipe = () => {
               setNewRecipe({ ...newRecipe, servings: parseInt(e.target.value) })
             }
           ></TextField></div></div>
-          <Button id="addNewIngredientBtn"onClick={() => setNewIngredient(true)}>add ingredient</Button>
-          {newIngredient ? createIngredient() : ''}
+          <Button id="addNewIngredientBtn"onClick={() => setSettingNewIngredient(true)} startIcon={<AddCircle />}>add ingredient</Button>
+          {settingNewIngredient ? createIngredient() : ''}
+          {newIngredient.name !== '' ? newRecipe.ingredients.map(ingredient => <p>{ingredient.amount} {ingredient.measurement} {ingredient.name}</p>) : ''}
+          <Button id="addNewDirectionBtn"onClick={() => setSettingNewDirection(true)} startIcon={<AddCircle />}>add direction</Button>
+          {settingNewDirection ? createDirection() : ''}
+          {newDirection ? newRecipe.directions.map(direction => <p>{direction.instruction} {direction.optional}</p>): ''}
           <Button id="submitRecipeBtn" onClick={createRecipe}>Submit Recipe</Button>
         </FormControl>
       ) : (
