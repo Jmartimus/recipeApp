@@ -6,7 +6,7 @@ export interface Ingredient {
 }
 
 export interface Direction {
-  instruction: string;
+  instructions: string;
   optional: Boolean
 }
 

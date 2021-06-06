@@ -15,6 +15,6 @@ export const chosenRec = atom<Recipe>({
     postDate: '',
     editDate: '',
     ingredients: [{ uuid: '', amount: 0, measurement: '', name: '' }],
-    directions: [{ instruction: '', optional: false }],
+    directions: [{ instructions: '', optional: false }],
   },
 });

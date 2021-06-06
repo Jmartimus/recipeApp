@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './recipes.scss';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Recipe } from '../interfaces/incRecipes.interface';
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { chosenRec } from '../recoil/atoms';
 import { Dialog, IconButton } from '@material-ui/core';
 import { AddCircle } from '@material-ui/icons';
@@ -13,12 +13,24 @@ import { AddRecipe } from '../addAndEdit/add';
 
 function Recipes() {
   const [recipeList, setList] = useState<Recipe[]>();
-  const [open, setOpen] = React.useState(false);
+  const sentRec = useRecoilValue(chosenRec);
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const setRecipe = useSetRecoilState(chosenRec);
   const getRecipes = async () => {
     const response = await axios.get('http://localhost:3001/recipes');
     setList(response.data);
   };
+  const history = useHistory();
+  useEffect(() => {
+    setRecipe({ ...sentRec, uuid: '' })
+    setMounted(true);
+  },[])
+  useEffect(() => {
+    if (sentRec.uuid && mounted) {
+      history.push("/recipePage");
+    }
+  }, [sentRec, mounted])
   const setGS = (recipe: Recipe) => {
     setRecipe(recipe);
   };
@@ -38,10 +50,9 @@ function Recipes() {
       <div id="recipesLargeContainer">
         {recipeList
           ? recipeList.map((recipe) => (
-              <Link
+              <div
                 key={recipe.uuid}
                 id="link"
-                to="/recipePage"
                 onClick={() => setGS(recipe)}
               >
                 <div id="recipeContainer">
@@ -54,7 +65,7 @@ function Recipes() {
                   <h1 id="firstPageTitle"><hr></hr>{recipe.title}</h1>
                   <p id="firstPageDesc">{recipe.description}</p>
                 </div>
-              </Link>
+              </div>
             ))
           : ''}
       </div>

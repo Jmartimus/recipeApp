@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { chosenRec } from '../recoil/atoms';
 import axios from 'axios';
@@ -19,15 +19,33 @@ function RecipePage() {
   const sentRec = useRecoilValue(chosenRec);
   const [specials, setSpecials] = useState<Specials[]>();
   const [currentSpecial, setCurrentSpecial] = useState<Specials>();
-  const [currentIngredient, setCurrentIngredient] = useState<Ingredient>();
-  const [checked, setChecked] = useState(true);
+  const [checkedArray, setCheckedArray] = useState<
+    { id: string; checked: boolean }[]
+    >([]);
+  const history = useHistory();
   useEffect(() => {
+    if (!sentRec.uuid) {
+      history.push("/");
+    }
     const getSpecials = async () => {
       const response = await axios.get('http://localhost:3001/specials');
       setSpecials(response.data);
     };
     getSpecials();
   }, []);
+  useEffect(() => {
+    const checkListArray = sentRec.ingredients.map((ingredient) => ({
+      id: ingredient.uuid,
+      checked: false,
+    }));
+    setCheckedArray(checkListArray);
+  }, [sentRec.ingredients]);
+  const checkForCheck = (ingredientId: string) => {
+    const isChecked = checkedArray.find(
+      (item) => item.id === ingredientId
+    )?.checked;
+    return !!isChecked;
+  };
   const findSpecials = (ingredient: Ingredient) => {
     if (!specials) {
       return [];
@@ -40,13 +58,16 @@ function RecipePage() {
     }
     return matches;
   };
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+  const handleChange = (ingredientId: string) => {
+    const checkedArrayClone = [...checkedArray];
+    for (const item of checkedArrayClone) {
+      if (item.id === ingredientId) {
+        item.checked = !item.checked;
+        break;
+      }
+    }
+    setCheckedArray(checkedArrayClone);
   };
-  //1. fix checkbox to work for each ingredient and change css of checkbox
-  //2. create input page ("+" button with material Icon on the bottom recipe page that opens a modal with a form to input a new recipe or special)
-  //3. edit recipes and specials page ("edit document" button with material Icon on other side of recipe page that opens a modal with the option to edit specials or recipes.)
-  //4. background moves when modal opens 
 
   return (
     <div id="recPageBack">
@@ -60,7 +81,8 @@ function RecipePage() {
               src={sentRec.images.medium}
               id="recipeImage"
             ></img>
-          </div><hr></hr>
+          </div>
+          <hr></hr>
           <div id="miniContainer">
             <h2 id="ingredientsTitle">Ingredients </h2>
             <h2 id="servingsTitle">
@@ -71,7 +93,10 @@ function RecipePage() {
             {sentRec.ingredients.map((ingredient: Ingredient) => (
               <li key={ingredient.uuid} id="ingredient">
                 {' '}
-                <Checkbox checked={checked} onClick={() => setCurrentIngredient(ingredient)} onChange={handleChange}></Checkbox>
+                <Checkbox
+                  checked={checkForCheck(ingredient.uuid)}
+                  onChange={() => handleChange(ingredient.uuid)}
+                ></Checkbox>
                 {ingredient.amount} {ingredient.measurement} {ingredient.name}
                 <div>
                   {findSpecials(ingredient).map((special) => (
@@ -106,12 +131,13 @@ function RecipePage() {
             </Dialog>
           ) : (
             ''
-          )}<hr></hr>
+          )}
+          <hr></hr>
           <h2 id="directionsTitle">Directions </h2>
           <ol id="directionsList">
             {sentRec.directions.map((direction: Direction, i: number) => (
               <li key={i} id="direction">
-                {direction.instruction}
+                {direction.instructions}
               </li>
             ))}
           </ol>

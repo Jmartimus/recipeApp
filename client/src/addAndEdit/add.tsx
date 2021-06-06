@@ -9,7 +9,11 @@ import {
   Select,
   TextField,
 } from '@material-ui/core';
-import { Direction, Ingredient, Recipe } from '../interfaces/incRecipes.interface';
+import {
+  Direction,
+  Ingredient,
+  Recipe,
+} from '../interfaces/incRecipes.interface';
 import './add.scss';
 import { timeStamper } from '../timestamp';
 import { AddCircle } from '@material-ui/icons';
@@ -29,32 +33,28 @@ export const AddRecipe = () => {
     postDate: '',
     editDate: '',
     ingredients: [
-      {
-        uuid: '',
-        amount: 0,
-        measurement: '',
-        name: '',
-      },
     ],
     directions: [
       {
-        instruction: '',
+        instructions: '',
         optional: false,
       },
     ],
   });
   const [choice, setChoice] = useState<string>('');
-  const [settingNewIngredient, setSettingNewIngredient] = useState<boolean>(false);
+  const [settingNewIngredient, setSettingNewIngredient] =
+    useState<boolean>(false);
   const [newIngredient, setNewIngredient] = useState<Ingredient>({
     uuid: '',
-    amount: NaN,
+    amount: 0,
     measurement: '',
     name: '',
   });
-  const [settingNewDirection, setSettingNewDirection] = useState<boolean>(false);
+  const [settingNewDirection, setSettingNewDirection] =
+    useState<boolean>(false);
   const [newDirection, setNewDirection] = useState<Direction>({
-    instruction: '',
-   optional: false,
+    instructions: '',
+    optional: false,
   });
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -75,84 +75,119 @@ export const AddRecipe = () => {
   const createIngredient = () => {
     const finishIngredient = () => {
       setSettingNewIngredient(false);
-      setNewRecipe({...newRecipe, ingredients:[...newRecipe.ingredients, newIngredient]})
-    }
+      setNewRecipe({
+        ...newRecipe,
+        ingredients: [...newRecipe.ingredients, newIngredient],
+      });
+    };
     return (
-      <Dialog open={settingNewIngredient}
-      onClose={() => setSettingNewIngredient(false)}
-      className="specialContainer">
-      <FormControl className="ingDirFormContainer">
-          <TextField
-            variant="outlined"
-          className="ingDirInputFields"
-          value={newIngredient.name}
-          placeholder="name of ingredient"
-          type="text"
-          onChange={(e) =>
-            setNewIngredient({ ...newIngredient, name: e.target.value })
-          }
-        ></TextField>
-          <TextField
-            variant="outlined"
-            className="ingDirInputFields"
-          value={newIngredient.measurement}
-          placeholder="What measurement?"
-          type="text"
-          onChange={(e) =>
-            setNewIngredient({ ...newIngredient, measurement: e.target.value })
-          }
-        ></TextField>
-          <TextField
-            variant="outlined"
-            className="ingDirInputFields"
-          value={newIngredient.amount}
-          placeholder="How many?"
-          type="number"
-          onChange={(e) =>
-            setNewIngredient({ ...newIngredient, amount: parseInt(e.target.value) })
-          }
-        ></TextField>
-        <Button onClick={finishIngredient} id="submitIngredient">Submit Ingredient</Button>
-      </FormControl></Dialog>
+      <Dialog
+        open={settingNewIngredient}
+        onClose={() => setSettingNewIngredient(false)}
+        className="specialContainer"
+      >
+        <h1 id="addIngredientTitle">
+          Add Ingredient<hr></hr>
+        </h1>
+        <FormControl className="ingDirFormContainer">
+          <div className="inputIngRow">
+            <p className="inputIngTitle">Name</p>
+            <TextField
+              variant="outlined"
+              className="ingDirInputFields"
+              value={newIngredient.name}
+              placeholder="name of ingredient"
+              type="text"
+              onChange={(e) =>
+                setNewIngredient({ ...newIngredient, name: e.target.value })
+              }
+            ></TextField>
+          </div>
+          <div className="inputIngRow">
+            <p className="inputIngTitle">Measurement</p>
+            <TextField
+              variant="outlined"
+              className="ingDirInputFields"
+              value={newIngredient.measurement}
+              placeholder="What measurement?"
+              type="text"
+              onChange={(e) =>
+                setNewIngredient({
+                  ...newIngredient,
+                  measurement: e.target.value,
+                })
+              }
+            ></TextField>
+          </div>
+          <div className="inputIngRow">
+            <p className="inputIngTitle">Amount</p>
+            <TextField
+              variant="outlined"
+              className="ingDirInputFields"
+              value={newIngredient.amount}
+              placeholder="How many?"
+              type="number"
+              onChange={(e) =>
+                setNewIngredient({
+                  ...newIngredient,
+                  amount: parseInt(e.target.value),
+                })
+              }
+            ></TextField>
+          </div>
+          <Button onClick={finishIngredient} id="submitIngredient">
+            Submit Ingredient
+          </Button>
+        </FormControl>
+      </Dialog>
     );
   };
   const createDirection = () => {
     const finishDirection = () => {
       setSettingNewDirection(false);
-      setNewRecipe({...newRecipe, directions:[...newRecipe.directions, newDirection]})
-    }
+      setNewRecipe({
+        ...newRecipe,
+        directions: [...newRecipe.directions, newDirection],
+      });
+    };
     return (
-      <Dialog open={settingNewDirection}
-      onClose={() => setSettingNewDirection(false)}
-      className="specialContainer">
-      <FormControl>
-        <TextField
-          value={newDirection.instruction}
-          placeholder="Write one instructional step"
-          type="text"
-          onChange={(e) =>
-            setNewDirection({ ...newDirection, instruction: e.target.value })
-          }
+      <Dialog
+        open={settingNewDirection}
+        onClose={() => setSettingNewDirection(false)}
+        className="specialContainer"
+      >
+        <FormControl>
+          <TextField
+            value={newDirection.instructions}
+            placeholder="Write one instructional step"
+            type="text"
+            onChange={(e) =>
+              setNewDirection({ ...newDirection, instructions: e.target.value })
+            }
           ></TextField>
-          <InputLabel id="firstQuestion">
-            What do you want to add?
-          </InputLabel>
+          <InputLabel id="firstQuestion">What do you want to add?</InputLabel>
           <Select
-              labelId=""
-              variant="outlined"
+            labelId=""
+            variant="outlined"
             id="dropdown"
             value={newDirection.optional}
             onChange={(e) =>
-              setNewDirection({ ...newDirection, optional: Boolean(e.target.value) })
+              setNewDirection({
+                ...newDirection,
+                optional: Boolean(e.target.value),
+              })
             }
           >
-            <MenuItem value='false'>False</MenuItem>
-            <MenuItem value='true'>True</MenuItem>
+            <MenuItem value="false">False</MenuItem>
+            <MenuItem value="true">True</MenuItem>
           </Select>
-        <Button onClick={finishDirection} id="submitDirection">Submit Direction</Button>
-      </FormControl></Dialog>
+          <Button onClick={finishDirection} id="submitDirection">
+            Submit Direction
+          </Button>
+        </FormControl>
+      </Dialog>
     );
-  }; 
+  };
 
   // const addSpecialIngredient = async () => {
   //   const response = await axios.post(
@@ -168,97 +203,156 @@ export const AddRecipe = () => {
     <div id="addContainer">
       {choice === '' ? (
         <div id="largeFormContainer">
-          <h1 id="firstFormTitle">Add a Recipe or Special Ingredient!<hr></hr></h1>
-          
-        <FormControl id="formContainer">
-          <InputLabel id="firstQuestion">
-            What do you want to add?
-          </InputLabel>
-          <Select
+          <h1 id="firstFormTitle">
+            Add a Recipe or Special Ingredient!<hr></hr>
+          </h1>
+
+          <FormControl id="formContainer">
+            <InputLabel id="firstQuestion">What do you want to add?</InputLabel>
+            <Select
               labelId=""
               variant="outlined"
-            id="dropdown"
-            value={choice}
-            onChange={handleChange}
-          >
-            <MenuItem value="recipes">Recipe</MenuItem>
-            <MenuItem value="specials">Special ingredient</MenuItem>
-          </Select>
-        </FormControl></div>
+              id="dropdown"
+              value={choice}
+              onChange={handleChange}
+            >
+              <MenuItem value="recipes">Recipe</MenuItem>
+              <MenuItem value="specials">Special ingredient</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
       ) : (
         ''
       )}
       {choice === 'recipes' ? (
-        <FormControl id='recipeInputContainer'>
-          <h1 id="recipeCardTitle">Recipe Card<hr></hr></h1><div id="inputContainer">
-          <div className="inputRow"><p className="recipeInputTitles">Title </p><TextField
-            variant="outlined"
-            className="recipeInputs"
-            value={newRecipe.title}
-            placeholder="title of your recipe..."
-            type="text"
-            onChange={(e) =>
-              setNewRecipe({ ...newRecipe, title: e.target.value })
-            }
-          ></TextField></div>
-          <div className="inputRow"><p className="recipeInputTitles">Description</p><TextField
-            variant="outlined"
-            className="recipeInputs"
-            value={newRecipe.description}
-            placeholder="type a recipe description..."
-            type="text"
-            onChange={(e) =>
-              setNewRecipe({ ...newRecipe, description: e.target.value })
-            }
-          ></TextField></div>
-          <div className="inputRow"><p className="recipeInputTitles">Serves </p><TextField
-            variant="outlined"
-            className="recipeInputs"
-            value={newRecipe.servings}
-            placeholder="How many servings?"
-            type="text"
-            onChange={(e) =>
-              setNewRecipe({ ...newRecipe, servings: parseInt(e.target.value) })
-            }
-          ></TextField></div>
-          <div className="inputRow"><p className="recipeInputTitles">Prep Time</p><TextField
-            variant="outlined"
-            className="recipeInputs"
-            value={newRecipe.prepTime}
-            placeholder="How many minutes of preperation time?"
-            type="text"
-            onChange={(e) =>
-              setNewRecipe({ ...newRecipe, prepTime: parseInt(e.target.value) })
-            }
-          ></TextField></div>
-          
-          <div className="inputRow"><p className="recipeInputTitles">Cook Time</p><TextField
-            variant="outlined"
-            className="recipeInputs"
-            value={newRecipe.cookTime}
-            placeholder="How many minutes of cook time?"
-            type="text"
-            onChange={(e) =>
-              setNewRecipe({ ...newRecipe, cookTime: parseInt(e.target.value) })
-            }
-          ></TextField></div>
-          <div className="inputRow"><p className="recipeInputTitles">Serves</p><TextField
-            variant="outlined"
-            className="recipeInputs"
-            value={newRecipe.servings}
-            placeholder="How many servings?"
-            type="text"
-            onChange={(e) =>
-              setNewRecipe({ ...newRecipe, servings: parseInt(e.target.value) })
-            }
-          ></TextField></div></div>
-          <Button id="addNewIngredientBtn"onClick={() => setSettingNewIngredient(true)} startIcon={<AddCircle />}>add ingredient</Button>
+        <FormControl id="recipeInputContainer">
+          <h1 id="recipeCardTitle">
+            Recipe Card<hr></hr>
+          </h1>
+          <div id="inputContainer">
+            <div className="inputRow">
+              <p className="recipeInputTitles">Title </p>
+              <TextField
+                variant="outlined"
+                className="recipeInputs"
+                value={newRecipe.title}
+                placeholder="title of your recipe..."
+                type="text"
+                onChange={(e) =>
+                  setNewRecipe({ ...newRecipe, title: e.target.value })
+                }
+              ></TextField>
+            </div>
+            <div className="inputRow">
+              <p className="recipeInputTitles">Description</p>
+              <TextField
+                variant="outlined"
+                className="recipeInputs"
+                value={newRecipe.description}
+                placeholder="type a recipe description..."
+                type="text"
+                onChange={(e) =>
+                  setNewRecipe({ ...newRecipe, description: e.target.value })
+                }
+              ></TextField>
+            </div>
+            <div className="inputRow">
+              <p className="recipeInputTitles">Serves </p>
+              <TextField
+                variant="outlined"
+                className="recipeInputs"
+                value={newRecipe.servings}
+                placeholder="How many servings?"
+                type="text"
+                onChange={(e) =>
+                  setNewRecipe({
+                    ...newRecipe,
+                    servings: parseInt(e.target.value),
+                  })
+                }
+              ></TextField>
+            </div>
+            <div className="inputRow">
+              <p className="recipeInputTitles">Prep Time</p>
+              <TextField
+                variant="outlined"
+                className="recipeInputs"
+                value={newRecipe.prepTime}
+                placeholder="How many minutes of preperation time?"
+                type="text"
+                onChange={(e) =>
+                  setNewRecipe({
+                    ...newRecipe,
+                    prepTime: parseInt(e.target.value),
+                  })
+                }
+              ></TextField>
+            </div>
+
+            <div className="inputRow">
+              <p className="recipeInputTitles">Cook Time</p>
+              <TextField
+                variant="outlined"
+                className="recipeInputs"
+                value={newRecipe.cookTime}
+                placeholder="How many minutes of cook time?"
+                type="text"
+                onChange={(e) =>
+                  setNewRecipe({
+                    ...newRecipe,
+                    cookTime: parseInt(e.target.value),
+                  })
+                }
+              ></TextField>
+            </div>
+            <div className="inputRow">
+              <p className="recipeInputTitles">Serves</p>
+              <TextField
+                variant="outlined"
+                className="recipeInputs"
+                value={newRecipe.servings}
+                placeholder="How many servings?"
+                type="text"
+                onChange={(e) =>
+                  setNewRecipe({
+                    ...newRecipe,
+                    servings: parseInt(e.target.value),
+                  })
+                }
+              ></TextField>
+            </div>
+          </div>
+          <Button
+            id="addNewIngredientBtn"
+            onClick={() => setSettingNewIngredient(true)}
+            startIcon={<AddCircle />}
+          >
+            add ingredient
+          </Button>
           {settingNewIngredient ? createIngredient() : ''}
-          {newIngredient.name !== '' ? newRecipe.ingredients.map(ingredient => <p>{ingredient.amount} {ingredient.measurement} {ingredient.name}</p>) : ''}
-          <Button id="addNewDirectionBtn"onClick={() => setSettingNewDirection(true)} startIcon={<AddCircle />}>add direction</Button>
+          {newRecipe.ingredients.map((ingredient) => (
+                <p>
+                  {ingredient.amount} {ingredient.measurement} {ingredient.name}
+                </p>
+              ))}
+          <Button
+            id="addNewDirectionBtn"
+            onClick={() => setSettingNewDirection(true)}
+            startIcon={<AddCircle />}
+          >
+            add direction
+          </Button>
           {settingNewDirection ? createDirection() : ''}
-          {newDirection ? newRecipe.directions.map(direction => <p>{direction.instruction} {direction.optional}</p>): ''}
-          <Button id="submitRecipeBtn" onClick={createRecipe}>Submit Recipe</Button>
+          {newDirection
+            ? newRecipe.directions.map((direction) => (
+                <p>
+                  {direction.instructions} {direction.optional}
+                </p>
+              ))
+            : ''}
+          <Button id="submitRecipeBtn" onClick={createRecipe}>
+            Submit Recipe
+          </Button>
         </FormControl>
       ) : (
         ''
