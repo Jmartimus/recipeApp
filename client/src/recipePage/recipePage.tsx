@@ -60,7 +60,7 @@ function RecipePage() {
               src={sentRec.images.medium}
               id="recipeImage"
             ></img>
-          </div>
+          </div><hr></hr>
           <div id="miniContainer">
             <h2 id="ingredientsTitle">Ingredients </h2>
             <h2 id="servingsTitle">
@@ -106,7 +106,7 @@ function RecipePage() {
             </Dialog>
           ) : (
             ''
-          )}
+          )}<hr></hr>
           <h2 id="directionsTitle">Directions </h2>
           <ol id="directionsList">
             {sentRec.directions.map((direction: Direction, i: number) => (

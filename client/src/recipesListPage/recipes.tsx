@@ -45,12 +45,13 @@ function Recipes() {
                 onClick={() => setGS(recipe)}
               >
                 <div id="recipeContainer">
-                  {/* <img
+                  <img
                     id="firstPagePic"
                     src={recipe.images.medium}
                     alt={recipe.description}
-                  ></img> */}
-                  <h1 id="firstPageTitle">{recipe.title}</h1>
+                  ></img>
+                
+                  <h1 id="firstPageTitle"><hr></hr>{recipe.title}</h1>
                   <p id="firstPageDesc">{recipe.description}</p>
                 </div>
               </Link>
@@ -64,10 +65,10 @@ function Recipes() {
           </IconButton>
           <IconButton id="editBtn" onClick={handleClickOpen}>
             <EditIcon fontSize="large"/>
-          </IconButton>
-          <Dialog open={open} onClose={handleClose}><AddRecipe /></Dialog>
+          </IconButton>  
         </div>
       </div>
+      <Dialog open={open} onClose={handleClose}><AddRecipe /></Dialog>
     </div>
   );
 }

@@ -1,0 +1,65 @@
+@import '../variables.scss';
+
+#addContainer {
+}
+#largeFormContainer {
+  height: 200px;
+  width: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+}
+#firstFormTitle {
+  font-family: $roboto;
+  font-size: 26px;
+  margin-top: 10px;
+}
+#firstQuestion {
+  width: 300px;
+  text-align: left;
+  margin-left: 10px;
+}
+#dropdown {
+  width: 350px;
+}
+#recipeInputContainer {
+  height: 700px;
+  width: 600px;
+  display: flex;
+  align-items: center;
+}
+#inputContainer {
+
+}
+.inputRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.recipeInputTitles {
+  font-family: $roboto;
+  font-size: 18px;
+  margin-right: 20px;
+}
+.recipeInputs {
+  width: 400px;
+  margin: 10px;
+}
+#submitRecipeBtn {
+  color: black;
+  text-align: center;
+  border: 3px solid black;
+}
+#addNewIngredientBtn {
+  color: black;
+  text-align: center;
+  border: 3px solid black;
+}
+#submitIngredient {
+  color: black;
+  text-align: center;
+  border: 3px solid black;
+}
