@@ -8,7 +8,7 @@ import { chosenRec } from '../recoil/atoms';
 import { Dialog, IconButton } from '@material-ui/core';
 import { AddCircle } from '@material-ui/icons';
 import EditIcon from '@material-ui/icons/Edit';
-import { AddRecipe } from '../addAndEdit/add';
+import { AddRecipe } from '../add/add';
 
 
 function Recipes() {
@@ -73,10 +73,7 @@ function Recipes() {
         <div id="btnContainer">
           <IconButton id="addBtn" onClick={handleClickOpen}>
             <AddCircle fontSize="large"/>
-          </IconButton>
-          <IconButton id="editBtn" onClick={handleClickOpen}>
-            <EditIcon fontSize="large"/>
-          </IconButton>  
+          </IconButton> 
         </div>
       </div>
       <Dialog open={open} onClose={handleClose}><AddRecipe /></Dialog>

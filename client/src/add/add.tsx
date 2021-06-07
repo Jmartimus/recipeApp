@@ -64,10 +64,36 @@ export const AddRecipe = () => {
     const response = await axios.post(`${URL}${'recipes'}`, {
       title: newRecipe.title,
       description: newRecipe.description,
+      servings: newRecipe.servings,
+    prepTime: newRecipe.prepTime,
+    cookTime: newRecipe.cookTime,
       postDate: timeStamper(),
+      ingredients: [...newRecipe.ingredients
+      ],
+      directions: [
+        ...newRecipe.directions
+      ],
     });
     console.log(response);
-    setNewRecipe({ ...newRecipe, title: '', description: '', postDate: '' });
+    setNewRecipe({
+      uuid: '',
+      title: '',
+      description: '',
+      images: { full: '', medium: '', small: '' },
+      servings: 0,
+      prepTime: 0,
+      cookTime: 0,
+      postDate: '',
+      editDate: '',
+      ingredients: [
+      ],
+      directions: [
+        {
+          instructions: '',
+          optional: false,
+        },
+      ],
+    });
     alert('Recipe created!');
     // setRecentPost(response.data);
   };
@@ -90,8 +116,9 @@ export const AddRecipe = () => {
           Add Ingredient<hr></hr>
         </h1>
         <FormControl className="ingDirFormContainer">
-          <div className="inputIngRow">
-            <p className="inputIngTitle">Name</p>
+          <div className= "inputContainer">
+          <div className="inputRow">
+            <p className="recipeInputTitles">Name</p>
             <TextField
               variant="outlined"
               className="ingDirInputFields"
@@ -103,8 +130,8 @@ export const AddRecipe = () => {
               }
             ></TextField>
           </div>
-          <div className="inputIngRow">
-            <p className="inputIngTitle">Measurement</p>
+          <div className="inputRow">
+            <p className="recipeInputTitles">Measurement</p>
             <TextField
               variant="outlined"
               className="ingDirInputFields"
@@ -119,8 +146,8 @@ export const AddRecipe = () => {
               }
             ></TextField>
           </div>
-          <div className="inputIngRow">
-            <p className="inputIngTitle">Amount</p>
+          <div className="inputRow">
+            <p className="recipeInputTitles">Amount</p>
             <TextField
               variant="outlined"
               className="ingDirInputFields"
@@ -134,7 +161,8 @@ export const AddRecipe = () => {
                 })
               }
             ></TextField>
-          </div>
+            </div>
+            </div>
           <Button onClick={finishIngredient} id="submitIngredient">
             Submit Ingredient
           </Button>
@@ -165,7 +193,7 @@ export const AddRecipe = () => {
               setNewDirection({ ...newDirection, instructions: e.target.value })
             }
           ></TextField>
-          <InputLabel id="firstQuestion">What do you want to add?</InputLabel>
+          <InputLabel id="optional">Is this step optional?</InputLabel>
           <Select
             labelId=""
             variant="outlined"
@@ -305,54 +333,39 @@ export const AddRecipe = () => {
                 }
               ></TextField>
             </div>
-            <div className="inputRow">
-              <p className="recipeInputTitles">Serves</p>
-              <TextField
-                variant="outlined"
-                className="recipeInputs"
-                value={newRecipe.servings}
-                placeholder="How many servings?"
-                type="text"
-                onChange={(e) =>
-                  setNewRecipe({
-                    ...newRecipe,
-                    servings: parseInt(e.target.value),
-                  })
-                }
-              ></TextField>
-            </div>
-          </div>
+          </div><div className="addedContainer"><hr></hr><p id="ingredientsAddedTitle">Ingredients Added:</p>
+          {settingNewIngredient ? createIngredient() : ''}
+          {newRecipe.ingredients.map((ingredient) => (
+                <p id="addedIng">
+                  {ingredient.amount} {ingredient.measurement} {ingredient.name}
+                </p>
+              ))}
           <Button
             id="addNewIngredientBtn"
             onClick={() => setSettingNewIngredient(true)}
             startIcon={<AddCircle />}
           >
             add ingredient
-          </Button>
-          {settingNewIngredient ? createIngredient() : ''}
-          {newRecipe.ingredients.map((ingredient) => (
-                <p>
-                  {ingredient.amount} {ingredient.measurement} {ingredient.name}
+          </Button></div>
+          <div className="addedContainer"><hr></hr><p id="directionsAddedTitle">Directions Added:</p>
+          {settingNewDirection ? createDirection() : ''}
+          {newDirection
+            ? newRecipe.directions.map((direction) => (
+                <p id="addedDirection">
+                  {direction.instructions} {direction.optional}
                 </p>
-              ))}
-          <Button
+              ))
+              : ''}
+            <Button
             id="addNewDirectionBtn"
             onClick={() => setSettingNewDirection(true)}
             startIcon={<AddCircle />}
           >
             add direction
-          </Button>
-          {settingNewDirection ? createDirection() : ''}
-          {newDirection
-            ? newRecipe.directions.map((direction) => (
-                <p>
-                  {direction.instructions} {direction.optional}
-                </p>
-              ))
-            : ''}
+          </Button><hr></hr></div><div id="submitBtnContainer">
           <Button id="submitRecipeBtn" onClick={createRecipe}>
             Submit Recipe
-          </Button>
+          </Button></div>
         </FormControl>
       ) : (
         ''

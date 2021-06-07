@@ -101,7 +101,7 @@ function RecipePage() {
                 <div>
                   {findSpecials(ingredient).map((special) => (
                     <div id="specialBtnContainer">
-                      <Button
+                      <Button key={special.uuid}
                         id="specialBtn"
                         onClick={() => setCurrentSpecial(special)}
                       >
@@ -119,7 +119,7 @@ function RecipePage() {
               onClick={() => setCurrentSpecial(undefined)}
               id="specialContainer"
             >
-              <DialogTitle>Special!</DialogTitle>
+              <h2 id="saleItem">Special!<hr></hr></h2>
               <List key={currentSpecial.uuid} id="special">
                 <ListItem id="specialTitle">
                   What: {currentSpecial.title}
