@@ -17,6 +17,7 @@ import {
 import './add.scss';
 import { timeStamper } from '../timestamp';
 import { AddCircle } from '@material-ui/icons';
+import { Specials } from '../interfaces/specials.interface';
 
 export const AddRecipe = () => {
   const URL = 'http://localhost:3001/';
@@ -25,9 +26,9 @@ export const AddRecipe = () => {
     title: '',
     description: '',
     images: { full: '', medium: '', small: '' },
-    servings: 0,
-    prepTime: 0,
-    cookTime: 0,
+    servings: NaN,
+    prepTime: NaN,
+    cookTime: NaN,
     postDate: '',
     editDate: '',
     ingredients: [],
@@ -53,42 +54,60 @@ export const AddRecipe = () => {
     instructions: '',
     optional: false,
   });
+  const [newSpecial, setNewSpecial] = useState<Specials>({
+    uuid: '',
+    ingredientId: '',
+    type: '',
+    title: '',
+    geo: '',
+    text: '',
+  });
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setChoice(event.target.value as string);
   };
   const createRecipe = async () => {
-    const response = await axios.post(`${URL}${'recipes'}`, {
-      title: newRecipe.title,
-      description: newRecipe.description,
-      servings: newRecipe.servings,
-      prepTime: newRecipe.prepTime,
-      cookTime: newRecipe.cookTime,
-      postDate: timeStamper(),
-      ingredients: [...newRecipe.ingredients],
-      directions: [...newRecipe.directions],
-    });
-    console.log(response);
-    setNewRecipe({
-      uuid: '',
-      title: '',
-      description: '',
-      images: { full: '', medium: '', small: '' },
-      servings: 0,
-      prepTime: 0,
-      cookTime: 0,
-      postDate: '',
-      editDate: '',
-      ingredients: [],
-      directions: [
-        {
-          instructions: '',
-          optional: false,
-        },
-      ],
-    });
-    alert('Recipe created!');
-    // setRecentPost(response.data);
+    if (
+      newRecipe.title !== '' &&
+      newRecipe.description !== '' &&
+      newRecipe.servings > 0 &&
+      newRecipe.prepTime > 0 &&
+      newRecipe.cookTime > 0
+    ) {
+      const response = await axios.post(`${URL}${'recipes'}`, {
+        title: newRecipe.title,
+        description: newRecipe.description,
+        images: { full: '', medium: '', small: '' },
+        servings: newRecipe.servings,
+        prepTime: newRecipe.prepTime,
+        cookTime: newRecipe.cookTime,
+        postDate: timeStamper(),
+        ingredients: [...newRecipe.ingredients],
+        directions: [...newRecipe.directions],
+      });
+      console.log(response);
+      setNewRecipe({
+        uuid: '',
+        title: '',
+        description: '',
+        images: { full: '', medium: '', small: '' },
+        servings: NaN,
+        prepTime: NaN,
+        cookTime: NaN,
+        postDate: '',
+        editDate: '',
+        ingredients: [],
+        directions: [
+          {
+            instructions: '',
+            optional: false,
+          },
+        ],
+      });
+      alert('Recipe created!');
+    } else {
+      alert('Fill all fields please');
+    }
   };
 
   const createIngredient = () => {
@@ -177,34 +196,49 @@ export const AddRecipe = () => {
         onClose={() => setSettingNewDirection(false)}
         className="specialContainer"
       >
-        <FormControl>
-          <TextField
-            value={newDirection.instructions}
-            placeholder="Write one instructional step"
-            type="text"
-            onChange={(e) =>
-              setNewDirection({ ...newDirection, instructions: e.target.value })
-            }
-          ></TextField>
-          <InputLabel id="optional">Is this step optional?</InputLabel>
-          <Select
-            labelId=""
-            variant="outlined"
-            id="dropdown"
-            value={newDirection.optional}
-            onChange={(e) =>
-              setNewDirection({
-                ...newDirection,
-                optional: Boolean(e.target.value),
-              })
-            }
-          >
-            <MenuItem value="false">False</MenuItem>
-            <MenuItem value="true">True</MenuItem>
-          </Select>
-          <Button onClick={finishDirection} id="submitDirection">
-            Submit Direction
-          </Button>
+        <h1 id="addRecipeTitle">
+          Add Instruction<hr></hr>
+        </h1>
+        <FormControl className="ingDirFormContainer">
+          <div className="inputContainer">
+            <div className="inputDirRow">
+              <p className="recipeInputTitles">Name</p>
+              <TextField
+                variant="outlined"
+                value={newDirection.instructions}
+                className="ingDirInputFields"
+                placeholder="Write Instruction"
+                type="text"
+                onChange={(e) =>
+                  setNewDirection({
+                    ...newDirection,
+                    instructions: e.target.value,
+                  })
+                }
+              ></TextField>
+            </div>
+            <div className="inputDirRow">
+              <p className="recipeInputTitles">Step Optional?</p>
+              <Select
+                labelId=""
+                variant="outlined"
+                id="dropdownDir"
+                value={newDirection.optional}
+                onChange={(e) =>
+                  setNewDirection({
+                    ...newDirection,
+                    optional: Boolean(e.target.value),
+                  })
+                }
+              >
+                <MenuItem value="false">False</MenuItem>
+                <MenuItem value="true">True</MenuItem>
+              </Select>
+            </div>
+            <Button onClick={finishDirection} id="submitDirection">
+              Submit Direction
+            </Button>
+          </div>
         </FormControl>
       </Dialog>
     );
@@ -284,7 +318,7 @@ export const AddRecipe = () => {
                 className="recipeInputs"
                 value={newRecipe.servings}
                 placeholder="How many servings?"
-                type="text"
+                type="number"
                 onChange={(e) =>
                   setNewRecipe({
                     ...newRecipe,
@@ -300,7 +334,7 @@ export const AddRecipe = () => {
                 className="recipeInputs"
                 value={newRecipe.prepTime}
                 placeholder="How many minutes of preperation time?"
-                type="text"
+                type="number"
                 onChange={(e) =>
                   setNewRecipe({
                     ...newRecipe,
@@ -317,7 +351,7 @@ export const AddRecipe = () => {
                 className="recipeInputs"
                 value={newRecipe.cookTime}
                 placeholder="How many minutes of cook time?"
-                type="text"
+                type="number"
                 onChange={(e) =>
                   setNewRecipe({
                     ...newRecipe,
@@ -373,28 +407,94 @@ export const AddRecipe = () => {
       ) : (
         ''
       )}
-      {/* {choice === 'specials' ? (
-        <FormControl>
-          <TextField
-            value={post.title}
-            placeholder="type your title here..."
-            type="text"
-            onChange={(e) =>
-              setPost({ id: post.id, title: e.target.value, body: post.body })
-            }
-          ></TextField>
-          <TextField
-            value={post.body}
-            placeholder="type your post here..."
-            type="text"
-            onChange={(e) =>
-              setPost({ id: post.id, title: post.title, body: e.target.value })
-            }
-          ></TextField>
+      {choice === 'specials' ? (
+        <FormControl id="newSpecialInputContainer">
+          <h1 id="specialIngredientTitle">
+            Add a Special Ingredient<hr></hr>
+          </h1>
+          <div id="inputContainer">
+            <div className="inputRow">
+              <p className="recipeInputTitles">Title </p>
+              <TextField
+                variant="outlined"
+                className="recipeInputs"
+                value={newSpecial.title}
+                placeholder="Title of special"
+                type="text"
+                onChange={(e) =>
+                  setNewSpecial({ ...newSpecial, title: e.target.value })
+                }
+              ></TextField>
+            </div>
+            <div className="inputRow">
+              <p className="recipeInputTitles">Type</p>
+              <TextField
+                variant="outlined"
+                className="recipeInputs"
+                value={newSpecial.type}
+                placeholder="What type of special?"
+                type="text"
+                onChange={(e) =>
+                  setNewSpecial({ ...newSpecial, type: e.target.value })
+                }
+              ></TextField>
+            </div>
+            <div className="inputRow">
+              <p className="recipeInputTitles">Text </p>
+              <TextField
+                variant="outlined"
+                className="recipeInputs"
+                value={newSpecial.text}
+                placeholder="Describe the special"
+                type="text"
+                onChange={(e) =>
+                  setNewSpecial({
+                    ...newSpecial,
+                    text: e.target.value,
+                  })
+                }
+              ></TextField>
+            </div>
+            <div className="inputRow">
+              <p className="recipeInputTitles">Cook Time</p>
+              <TextField
+                variant="outlined"
+                className="recipeInputs"
+                value={newRecipe.cookTime}
+                placeholder="How many minutes of cook time?"
+                type="text"
+                onChange={(e) =>
+                  setNewRecipe({
+                    ...newRecipe,
+                    cookTime: parseInt(e.target.value),
+                  })
+                }
+              ></TextField>
+            </div>
+            <div className="inputDirRow">
+              <p className="recipeInputTitles">Step Optional?</p>
+              <Select
+                labelId=""
+                variant="outlined"
+                id="dropdownDir"
+                value={newDirection.optional}
+                onChange={(e) =>
+                  setNewDirection({
+                    ...newDirection,
+                    optional: Boolean(e.target.value),
+                  })
+                }
+              >
+                <MenuItem value="false">False</MenuItem>
+                <MenuItem value="true">True</MenuItem>
+              </Select>
+            </div>
+            <Button>Submit Special</Button>
+          </div>
         </FormControl>
       ) : (
         ''
-      )} */}
+      )}
     </div>
   );
 };

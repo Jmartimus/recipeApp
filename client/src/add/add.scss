@@ -24,6 +24,9 @@
 #dropdown {
   width: 350px;
 }
+#dropdownDir{
+width: 100px;
+}
 #recipeInputContainer {
   display: flex;
   align-items: center;
@@ -31,15 +34,30 @@
 #recipeCardTitle {
   height: 50px;
 }
+#newSpecialInputContainer {
+  display: flex;
+  align-items: center;
+}
+#specialIngredientTitle {
+  height: 50px;
+}
 .inputContainer {
   margin: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
 }
 .inputRow {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 20px;
+  margin: 10px;
+}
+.inputDirRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
 }
 .recipeInputTitles {
   font-family: $roboto;
@@ -87,6 +105,8 @@
   color: black;
   text-align: center;
   border: 3px solid black;
+  width: 280px;
+  margin: 20px;
 }
 
 #addIngredientTitle {
@@ -96,6 +116,10 @@
 #ingredientsAddedTitle {
   font-family: $roboto;
   font-size: 24px;
+}
+#addRecipeTitle {
+  font-family: $roboto;
+  text-align: center;
 }
 #directionsAddedTitle {
   font-family: $roboto;

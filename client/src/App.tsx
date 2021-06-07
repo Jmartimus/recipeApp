@@ -1,11 +1,9 @@
-import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Recipes from './recipesListPage/recipes';
 import RecipePage from './recipePage/recipePage';
 import './app.scss';
 
 
-//finish add direction modal css
 //add submit special ingredient feature
 //media queries
 //write up a readme
