@@ -32,7 +32,7 @@
   height: 50px;
 }
 .inputContainer {
-margin:0px;
+  margin: 0px;
 }
 .inputRow {
   display: flex;
@@ -97,14 +97,13 @@ margin:0px;
   font-family: $roboto;
   font-size: 24px;
 }
-#directionsAddedTitle{
+#directionsAddedTitle {
   font-family: $roboto;
   font-size: 24px;
 }
 .addedContainer {
   width: 100%;
   text-align: center;
-
 }
 #submitBtnContainer {
   margin: 20px;

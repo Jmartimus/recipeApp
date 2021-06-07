@@ -10,7 +10,6 @@ import {
   Button,
   Checkbox,
   Dialog,
-  DialogTitle,
   List,
   ListItem,
 } from '@material-ui/core';
@@ -21,11 +20,11 @@ function RecipePage() {
   const [currentSpecial, setCurrentSpecial] = useState<Specials>();
   const [checkedArray, setCheckedArray] = useState<
     { id: string; checked: boolean }[]
-    >([]);
+  >([]);
   const history = useHistory();
   useEffect(() => {
     if (!sentRec.uuid) {
-      history.push("/");
+      history.push('/');
     }
     const getSpecials = async () => {
       const response = await axios.get('http://localhost:3001/specials');
@@ -101,7 +100,8 @@ function RecipePage() {
                 <div>
                   {findSpecials(ingredient).map((special) => (
                     <div id="specialBtnContainer">
-                      <Button key={special.uuid}
+                      <Button
+                        key={special.uuid}
                         id="specialBtn"
                         onClick={() => setCurrentSpecial(special)}
                       >
@@ -119,7 +119,9 @@ function RecipePage() {
               onClick={() => setCurrentSpecial(undefined)}
               id="specialContainer"
             >
-              <h2 id="saleItem">Special!<hr></hr></h2>
+              <h2 id="saleItem">
+                Special!<hr></hr>
+              </h2>
               <List key={currentSpecial.uuid} id="special">
                 <ListItem id="specialTitle">
                   What: {currentSpecial.title}

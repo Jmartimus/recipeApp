@@ -7,9 +7,7 @@ import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { chosenRec } from '../recoil/atoms';
 import { Dialog, IconButton } from '@material-ui/core';
 import { AddCircle } from '@material-ui/icons';
-import EditIcon from '@material-ui/icons/Edit';
 import { AddRecipe } from '../add/add';
-
 
 function Recipes() {
   const [recipeList, setList] = useState<Recipe[]>();
@@ -23,14 +21,14 @@ function Recipes() {
   };
   const history = useHistory();
   useEffect(() => {
-    setRecipe({ ...sentRec, uuid: '' })
+    setRecipe({ ...sentRec, uuid: '' });
     setMounted(true);
-  },[])
+  }, []);
   useEffect(() => {
     if (sentRec.uuid && mounted) {
-      history.push("/recipePage");
+      history.push('/recipePage');
     }
-  }, [sentRec, mounted])
+  }, [sentRec, mounted]);
   const setGS = (recipe: Recipe) => {
     setRecipe(recipe);
   };
@@ -50,19 +48,17 @@ function Recipes() {
       <div id="recipesLargeContainer">
         {recipeList
           ? recipeList.map((recipe) => (
-              <div
-                key={recipe.uuid}
-                id="link"
-                onClick={() => setGS(recipe)}
-              >
+              <div key={recipe.uuid} id="link" onClick={() => setGS(recipe)}>
                 <div id="recipeContainer">
                   <img
                     id="firstPagePic"
                     src={recipe.images.medium}
                     alt={recipe.description}
                   ></img>
-                
-                  <h1 id="firstPageTitle"><hr></hr>{recipe.title}</h1>
+                  <h1 id="firstPageTitle">
+                    <hr></hr>
+                    {recipe.title}
+                  </h1>
                   <p id="firstPageDesc">{recipe.description}</p>
                 </div>
               </div>
@@ -72,11 +68,13 @@ function Recipes() {
       <div id="buttonBar">
         <div id="btnContainer">
           <IconButton id="addBtn" onClick={handleClickOpen}>
-            <AddCircle fontSize="large"/>
-          </IconButton> 
+            <AddCircle fontSize="large" />
+          </IconButton>
         </div>
       </div>
-      <Dialog open={open} onClose={handleClose}><AddRecipe /></Dialog>
+      <Dialog open={open} onClose={handleClose}>
+        <AddRecipe />
+      </Dialog>
     </div>
   );
 }
