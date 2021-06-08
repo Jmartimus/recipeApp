@@ -6,13 +6,7 @@ import axios from 'axios';
 import './recipePage.scss';
 import { Specials } from '../interfaces/specials.interface';
 import { Ingredient, Direction } from '../interfaces/incRecipes.interface';
-import {
-  Button,
-  Checkbox,
-  Dialog,
-  List,
-  ListItem,
-} from '@material-ui/core';
+import { Button, Checkbox, Dialog, List, ListItem } from '@material-ui/core';
 
 function RecipePage() {
   const sentRec = useRecoilValue(chosenRec);

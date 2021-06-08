@@ -529,7 +529,9 @@ export const AddRecipe = () => {
                 )}
               </Select>
             </div>
-            <Button id="submitSpecialBtn" onClick={submitSpecial}>Submit Special</Button>
+            <Button id="submitSpecialBtn" onClick={submitSpecial}>
+              Submit Special
+            </Button>
           </div>
         </FormControl>
       ) : (

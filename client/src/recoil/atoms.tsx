@@ -21,10 +21,14 @@ export const chosenRec = atom<Recipe>({
 
 export const ingredientList = atom<Ingredient[][]>({
   key: 'ingredientList',
-  default: [[{
-    uuid: '',
-    amount: NaN,
-    measurement: '',
-    name: '',
-  }]]
-})
+  default: [
+    [
+      {
+        uuid: '',
+        amount: NaN,
+        measurement: '',
+        name: '',
+      },
+    ],
+  ],
+});

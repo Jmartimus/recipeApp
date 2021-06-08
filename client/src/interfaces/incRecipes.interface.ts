@@ -7,7 +7,7 @@ export interface Ingredient {
 
 export interface Direction {
   instructions: string;
-  optional: Boolean
+  optional: Boolean;
 }
 
 export interface Recipe {

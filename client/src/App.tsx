@@ -3,12 +3,6 @@ import Recipes from './recipesListPage/recipes';
 import RecipePage from './recipePage/recipePage';
 import './app.scss';
 
-
-//add submit special ingredient feature
-//media queries
-//write up a readme
-//send to company
-
 function App() {
   return (
     <Router>
