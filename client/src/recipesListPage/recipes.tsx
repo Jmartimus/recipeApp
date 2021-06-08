@@ -4,7 +4,7 @@ import './recipes.scss';
 import { useHistory } from 'react-router-dom';
 import { Recipe } from '../interfaces/incRecipes.interface';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { chosenRec } from '../recoil/atoms';
+import { chosenRec, ingredientList } from '../recoil/atoms';
 import { Dialog, IconButton } from '@material-ui/core';
 import { AddCircle } from '@material-ui/icons';
 import { AddRecipe } from '../add/add';
@@ -15,10 +15,15 @@ function Recipes() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const setRecipe = useSetRecoilState(chosenRec);
+  const setIngredientList = useSetRecoilState(ingredientList);
   const getRecipes = async () => {
     const response = await axios.get('http://localhost:3001/recipes');
     setList(response.data);
   };
+  if (recipeList) {
+    const getIngredientList = recipeList?.map((recipe) => recipe.ingredients);
+    setIngredientList(getIngredientList);
+  }
   const history = useHistory();
   useEffect(() => {
     setRecipe({ ...sentRec, uuid: '' });

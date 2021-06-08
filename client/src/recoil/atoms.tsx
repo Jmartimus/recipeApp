@@ -1,6 +1,6 @@
 //install recoil and create an atom that carries the recipe from recipes to recipePage in incRecipe format
 import { atom } from 'recoil';
-import { Recipe } from '../interfaces/incRecipes.interface';
+import { Ingredient, Recipe } from '../interfaces/incRecipes.interface';
 
 export const chosenRec = atom<Recipe>({
   key: 'chosenRec',
@@ -18,3 +18,13 @@ export const chosenRec = atom<Recipe>({
     directions: [{ instructions: '', optional: false }],
   },
 });
+
+export const ingredientList = atom<Ingredient[][]>({
+  key: 'ingredientList',
+  default: [[{
+    uuid: '',
+    amount: NaN,
+    measurement: '',
+    name: '',
+  }]]
+})

@@ -18,6 +18,8 @@ import './add.scss';
 import { timeStamper } from '../timestamp';
 import { AddCircle } from '@material-ui/icons';
 import { Specials } from '../interfaces/specials.interface';
+import { useRecoilValue } from 'recoil';
+import { ingredientList } from '../recoil/atoms';
 
 export const AddRecipe = () => {
   const URL = 'http://localhost:3001/';
@@ -39,6 +41,7 @@ export const AddRecipe = () => {
       },
     ],
   });
+  const importedIngredientList = useRecoilValue(ingredientList);
   const [choice, setChoice] = useState<string>('');
   const [settingNewIngredient, setSettingNewIngredient] =
     useState<boolean>(false);
@@ -62,6 +65,12 @@ export const AddRecipe = () => {
     geo: '',
     text: '',
   });
+  const [matchIngredient, setMatchedIngredient] = useState<Ingredient>();
+
+  const getRecipes = async () => {
+    const response = await axios.get('http://localhost:3001/recipes');
+    console.log(response.data);
+  };
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setChoice(event.target.value as string);
@@ -85,7 +94,6 @@ export const AddRecipe = () => {
         ingredients: [...newRecipe.ingredients],
         directions: [...newRecipe.directions],
       });
-      console.log(response);
       setNewRecipe({
         uuid: '',
         title: '',
@@ -243,16 +251,47 @@ export const AddRecipe = () => {
       </Dialog>
     );
   };
-
-  // const addSpecialIngredient = async () => {
-  //   const response = await axios.post(
-  //     `${URL}${'specials'}`
-  //     // { title: post.title, body: post.body },
-  //   );
-  //   console.log(response);
-  //   // setPost({ id: NaN, title: '', body: '' });
-  //   // setRecentPost(response.data);
-  // };
+  const matchIngredients = (chosenId: any) => {
+    for (const ingredients of importedIngredientList) {
+      for (const ingredient of ingredients) {
+        if (ingredient.uuid === chosenId) {
+          setMatchedIngredient(ingredient);
+        }
+      }
+    }
+    setNewSpecial({
+      ...newSpecial,
+      ingredientId: chosenId,
+    });
+  };
+  const submitSpecial = async () => {
+    if (
+      newSpecial.title !== '' &&
+      newSpecial.type !== '' &&
+      newSpecial.text !== '' &&
+      newSpecial.ingredientId !== ''
+    ) {
+      const response = await axios.post(`${URL}${'specials'}`, {
+        uuid: '',
+        ingredientId: newSpecial.ingredientId,
+        type: newSpecial.type,
+        title: newSpecial.title,
+        geo: newSpecial.geo,
+        text: newSpecial.text,
+      });
+      setNewSpecial({
+        uuid: '',
+        ingredientId: '',
+        type: '',
+        title: '',
+        geo: '',
+        text: '',
+      });
+      alert('Special created!');
+    } else {
+      alert('Special cannot be created. Try again later');
+    }
+  };
 
   return (
     <div id="addContainer">
@@ -456,40 +495,41 @@ export const AddRecipe = () => {
               ></TextField>
             </div>
             <div className="inputRow">
-              <p className="recipeInputTitles">Cook Time</p>
+              <p className="recipeInputTitles">Geolocation</p>
               <TextField
                 variant="outlined"
                 className="recipeInputs"
-                value={newRecipe.cookTime}
-                placeholder="How many minutes of cook time?"
+                value={newSpecial.geo}
+                placeholder="Latitude and Longitude"
                 type="text"
                 onChange={(e) =>
-                  setNewRecipe({
-                    ...newRecipe,
-                    cookTime: parseInt(e.target.value),
+                  setNewSpecial({
+                    ...newSpecial,
+                    geo: e.target.value,
                   })
                 }
               ></TextField>
             </div>
             <div className="inputDirRow">
-              <p className="recipeInputTitles">Step Optional?</p>
+              <p className="recipeInputTitles">Ingredient</p>
               <Select
                 labelId=""
                 variant="outlined"
                 id="dropdownDir"
-                value={newDirection.optional}
-                onChange={(e) =>
-                  setNewDirection({
-                    ...newDirection,
-                    optional: Boolean(e.target.value),
-                  })
-                }
+                type="string"
+                value={newSpecial.ingredientId}
+                onChange={(e) => matchIngredients(e.target.value)}
               >
-                <MenuItem value="false">False</MenuItem>
-                <MenuItem value="true">True</MenuItem>
+                {importedIngredientList.map((ingredients) =>
+                  ingredients.map((ingredient) => (
+                    <MenuItem value={ingredient.uuid}>
+                      {ingredient.name}
+                    </MenuItem>
+                  ))
+                )}
               </Select>
             </div>
-            <Button>Submit Special</Button>
+            <Button onClick={submitSpecial}>Submit Special</Button>
           </div>
         </FormControl>
       ) : (
