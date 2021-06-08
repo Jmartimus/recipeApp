@@ -44,7 +44,7 @@ function Recipes() {
     setOpen(true);
   };
 
-  const handleClose = (value: string) => {
+  const handleClose = () => {
     setOpen(false);
   };
 

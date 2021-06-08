@@ -65,12 +65,6 @@ export const AddRecipe = () => {
     geo: '',
     text: '',
   });
-  const [matchIngredient, setMatchedIngredient] = useState<Ingredient>();
-
-  const getRecipes = async () => {
-    const response = await axios.get('http://localhost:3001/recipes');
-    console.log(response.data);
-  };
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setChoice(event.target.value as string);
@@ -83,7 +77,7 @@ export const AddRecipe = () => {
       newRecipe.prepTime > 0 &&
       newRecipe.cookTime > 0
     ) {
-      const response = await axios.post(`${URL}${'recipes'}`, {
+      await axios.post(`${URL}${'recipes'}`, {
         title: newRecipe.title,
         description: newRecipe.description,
         images: { full: '', medium: '', small: '' },
@@ -252,13 +246,6 @@ export const AddRecipe = () => {
     );
   };
   const matchIngredients = (chosenId: any) => {
-    for (const ingredients of importedIngredientList) {
-      for (const ingredient of ingredients) {
-        if (ingredient.uuid === chosenId) {
-          setMatchedIngredient(ingredient);
-        }
-      }
-    }
     setNewSpecial({
       ...newSpecial,
       ingredientId: chosenId,
@@ -271,7 +258,7 @@ export const AddRecipe = () => {
       newSpecial.text !== '' &&
       newSpecial.ingredientId !== ''
     ) {
-      const response = await axios.post(`${URL}${'specials'}`, {
+      await axios.post(`${URL}${'specials'}`, {
         uuid: '',
         ingredientId: newSpecial.ingredientId,
         type: newSpecial.type,
