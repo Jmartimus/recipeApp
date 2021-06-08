@@ -209,7 +209,7 @@ export const AddRecipe = () => {
         </h1>
         <FormControl className="ingDirFormContainer">
           <div className="inputContainer">
-            <div className="inputDirRow">
+            <div className="inputRow">
               <p className="recipeInputTitles">Name</p>
               <TextField
                 variant="outlined"
@@ -225,7 +225,7 @@ export const AddRecipe = () => {
                 }
               ></TextField>
             </div>
-            <div className="inputDirRow">
+            <div className="inputRow">
               <p className="recipeInputTitles">Step Optional?</p>
               <Select
                 labelId=""
@@ -451,7 +451,7 @@ export const AddRecipe = () => {
           <h1 id="specialIngredientTitle">
             Add a Special Ingredient<hr></hr>
           </h1>
-          <div id="inputContainer">
+          <div className="inputContainer">
             <div className="inputRow">
               <p className="recipeInputTitles">Title </p>
               <TextField
@@ -510,12 +510,12 @@ export const AddRecipe = () => {
                 }
               ></TextField>
             </div>
-            <div className="inputDirRow">
+            <div className="inputRow">
               <p className="recipeInputTitles">Ingredient</p>
               <Select
                 labelId=""
                 variant="outlined"
-                id="dropdownDir"
+                id="dropdownSpecial"
                 type="string"
                 value={newSpecial.ingredientId}
                 onChange={(e) => matchIngredients(e.target.value)}
@@ -529,7 +529,7 @@ export const AddRecipe = () => {
                 )}
               </Select>
             </div>
-            <Button onClick={submitSpecial}>Submit Special</Button>
+            <Button id="submitSpecialBtn" onClick={submitSpecial}>Submit Special</Button>
           </div>
         </FormControl>
       ) : (
